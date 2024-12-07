@@ -6,7 +6,7 @@ run:
 
 # マイグレーションを実行
 migrate:
-	go run migration/main.go
+	go run migration/main.go migration/migrate.go
 
 # シードデータを挿入
 seed:

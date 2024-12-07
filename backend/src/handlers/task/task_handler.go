@@ -1,97 +1,106 @@
-package sample_handler
+package task_handler
 
 import (
 	"net/http"
 
-	sample_model "backend/src/models/sample"
+	task_model "backend/src/models/task"
 	logging_utils "backend/src/utils/logging"
 
 	"github.com/labstack/echo/v4"
 )
 
 // 全件取得
-func (h *SampleHandler) HandleGetAllSamples(c echo.Context) error {
+func (h *TaskHandler) HandlerGetAllTasks(c echo.Context) error {
 	start := logging_utils.LogStart()
 
-	samples, err := h.service.ServiceGetAllSamples()
-	//エラーのタイプで分岐
+	// 取得
+	tasks, err := h.service.ServiceGetAllTasks()
 	if err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end samples:", samples)
+	logging_utils.LogInfo("end tasks:", tasks)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusOK, samples)
+	return c.JSON(http.StatusOK, tasks)
 }
 
 // 1件取得
-func (h *SampleHandler) HandleGetSampleByID(c echo.Context) error {
+func (h *TaskHandler) HandlerGetTaskByID(c echo.Context) error {
 	start := logging_utils.LogStart()
 
 	id := c.Param("id")
-	sample, err := h.service.ServiceGetSampleByID(id)
+
+	// 取得
+	task, err := h.service.ServiceGetTaskByID(id)
 	if err != nil {
 		logging_utils.LogError(start, err)
-		return c.JSON(http.StatusNotFound, map[string]string{"error": "Sample not found"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end sample:", sample)
+	logging_utils.LogInfo("end task:", task)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusOK, sample)
+	return c.JSON(http.StatusOK, task)
 }
 
 // 作成
-func (h *SampleHandler) HandleCreateSample(c echo.Context) error {
+func (h *TaskHandler) HandlerCreateTask(c echo.Context) error {
 	start := logging_utils.LogStart()
 
-	var sample sample_model.Sample
-	if err := c.Bind(&sample); err != nil {
+	var task task_model.Task
+	if err := c.Bind(&task); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	if err := h.service.ServiceCreateSample(&sample); err != nil {
+
+	// 作成
+	if err := h.service.ServiceCreateTask(&task); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end sample:", sample)
+	logging_utils.LogInfo("end task:", task)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusCreated, sample)
+	return c.JSON(http.StatusOK, task)
 }
 
 // 更新
-func (h *SampleHandler) HandleUpdateSample(c echo.Context) error {
+func (h *TaskHandler) HandlerUpdateTask(c echo.Context) error {
 	start := logging_utils.LogStart()
 
 	id := c.Param("id")
-	var sample sample_model.Sample
-	if err := c.Bind(&sample); err != nil {
+	var task task_model.Task
+	if err := c.Bind(&task); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	sample.ID = id
-	if err := h.service.ServiceUpdateSample(&sample); err != nil {
+
+	// 更新
+	task.ID = id
+	if err := h.service.ServiceUpdateTask(&task); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end sample:", sample)
+	logging_utils.LogInfo("end task:", task)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusOK, sample)
+	return c.JSON(http.StatusOK, task)
 }
 
 // 削除
-func (h *SampleHandler) HandleDeleteSample(c echo.Context) error {
+func (h *TaskHandler) HandlerDeleteTask(c echo.Context) error {
 	start := logging_utils.LogStart()
 
 	id := c.Param("id")
-	if err := h.service.ServiceDeleteSample(id); err != nil {
+
+	// 削除
+	err := h.service.ServiceDeleteTask(id)
+	if err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end")
+	logging_utils.LogInfo("end task:", id)
 	logging_utils.LogEnd(start)
 	return c.NoContent(http.StatusNoContent)
 }

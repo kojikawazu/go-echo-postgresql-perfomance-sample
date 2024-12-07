@@ -1,97 +1,106 @@
-package sample_handler
+package project_handler
 
 import (
 	"net/http"
 
-	sample_model "backend/src/models/sample"
+	project_model "backend/src/models/project"
 	logging_utils "backend/src/utils/logging"
 
 	"github.com/labstack/echo/v4"
 )
 
 // 全件取得
-func (h *SampleHandler) HandleGetAllSamples(c echo.Context) error {
+func (h *ProjectHandler) HandlerGetAllProjects(c echo.Context) error {
 	start := logging_utils.LogStart()
 
-	samples, err := h.service.ServiceGetAllSamples()
-	//エラーのタイプで分岐
+	// 取得
+	projects, err := h.service.ServiceGetAllProjects()
 	if err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end samples:", samples)
+	logging_utils.LogInfo("end projects:", projects)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusOK, samples)
+	return c.JSON(http.StatusOK, projects)
 }
 
 // 1件取得
-func (h *SampleHandler) HandleGetSampleByID(c echo.Context) error {
+func (h *ProjectHandler) HandlerGetProjectByID(c echo.Context) error {
 	start := logging_utils.LogStart()
 
 	id := c.Param("id")
-	sample, err := h.service.ServiceGetSampleByID(id)
+
+	// 取得
+	project, err := h.service.ServiceGetProjectByID(id)
 	if err != nil {
 		logging_utils.LogError(start, err)
-		return c.JSON(http.StatusNotFound, map[string]string{"error": "Sample not found"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end sample:", sample)
+	logging_utils.LogInfo("end project:", project)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusOK, sample)
+	return c.JSON(http.StatusOK, project)
 }
 
 // 作成
-func (h *SampleHandler) HandleCreateSample(c echo.Context) error {
+func (h *ProjectHandler) HandlerCreateProject(c echo.Context) error {
 	start := logging_utils.LogStart()
 
-	var sample sample_model.Sample
-	if err := c.Bind(&sample); err != nil {
+	var project project_model.Project
+	if err := c.Bind(&project); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	if err := h.service.ServiceCreateSample(&sample); err != nil {
+
+	// 作成
+	if err := h.service.ServiceCreateProject(&project); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end sample:", sample)
+	logging_utils.LogInfo("end project:", project)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusCreated, sample)
+	return c.JSON(http.StatusOK, project)
 }
 
 // 更新
-func (h *SampleHandler) HandleUpdateSample(c echo.Context) error {
+func (h *ProjectHandler) HandlerUpdateProject(c echo.Context) error {
 	start := logging_utils.LogStart()
 
 	id := c.Param("id")
-	var sample sample_model.Sample
-	if err := c.Bind(&sample); err != nil {
+	var project project_model.Project
+	if err := c.Bind(&project); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
-	sample.ID = id
-	if err := h.service.ServiceUpdateSample(&sample); err != nil {
+
+	// 更新
+	project.ID = id
+	if err := h.service.ServiceUpdateProject(&project); err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end sample:", sample)
+	logging_utils.LogInfo("end project:", project)
 	logging_utils.LogEnd(start)
-	return c.JSON(http.StatusOK, sample)
+	return c.JSON(http.StatusOK, project)
 }
 
 // 削除
-func (h *SampleHandler) HandleDeleteSample(c echo.Context) error {
+func (h *ProjectHandler) HandlerDeleteProject(c echo.Context) error {
 	start := logging_utils.LogStart()
 
 	id := c.Param("id")
-	if err := h.service.ServiceDeleteSample(id); err != nil {
+
+	// 削除
+	err := h.service.ServiceDeleteProject(id)
+	if err != nil {
 		logging_utils.LogError(start, err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end")
+	logging_utils.LogInfo("end project:", id)
 	logging_utils.LogEnd(start)
 	return c.NoContent(http.StatusNoContent)
 }

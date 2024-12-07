@@ -5,9 +5,6 @@ import (
 	"log"
 	"os"
 
-	sample_model "backend/src/models/sample"
-	auth_user_model "backend/src/models/user"
-
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -50,10 +47,7 @@ func main() {
 	fmt.Println("Connected to database")
 
 	// マイグレーションを実行
-	if err := sample_model.AutoMigrate(db); err != nil {
-		log.Fatalf("Failed to migrate database: %v", err)
-	}
-	if err := auth_user_model.AutoMigrate(db); err != nil {
+	if err := SetUpMigration(db); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
 
