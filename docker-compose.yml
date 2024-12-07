@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: postgresql # PostgreSQLのユーザー名
+      POSTGRES_PASSWORD: postgresql # PostgreSQLのパスワード
+      POSTGRES_DB: postgresql # デフォルトのデータベース名
+    ports:
+      - "5432:5432" # ホストとコンテナのポートマッピング
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # データの永続化
+    networks:
+      - postgres_network
+    command: postgres -c 'listen_addresses=*'
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com # pgAdminのログインメールアドレス
+      PGADMIN_DEFAULT_PASSWORD: admin # pgAdminのログインパスワード
+    ports:
+      - "8085:80" # ホストの8085ポートでアクセス
+    depends_on:
+      - postgres # pgAdminはPostgreSQLが必要
+    networks:
+      - postgres_network
+
+networks:
+  postgres_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
