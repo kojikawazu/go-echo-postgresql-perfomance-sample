@@ -41,7 +41,7 @@ func (h *AuthUserHandler) SignIn(c echo.Context) error {
 	c.SetCookie(cookie)
 
 	// レスポンス
-	logging_utils.LogInfo("AuthUserHandler SignIn end.")
+	logging_utils.LogInfo("end")
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, map[string]string{"message": "sign-in successful"})
 }
@@ -79,7 +79,7 @@ func (h *AuthUserHandler) SignUp(c echo.Context) error {
 	c.SetCookie(cookie)
 
 	// 完了
-	logging_utils.LogInfo("AuthUserHandler SignUp end.")
+	logging_utils.LogInfo("end")
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, map[string]string{"message": "sign-up successful"})
 }
@@ -97,7 +97,7 @@ func (h *AuthUserHandler) SignOut(c echo.Context) error {
 	cookie.MaxAge = -1 // クッキーを即座に無効化
 	c.SetCookie(cookie)
 
-	logging_utils.LogInfo("AuthUserHandler SignOut end.")
+	logging_utils.LogInfo("end")
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, map[string]string{"message": "sign-out successful"})
 }
@@ -122,7 +122,7 @@ func (h *AuthUserHandler) GetAuthenticatedUser(c echo.Context) error {
 
 	// トークンから取得したユーザーID
 	userID := claims.UserID
-	logging_utils.LogInfo("AuthUserHandler GetAuthenticatedUser userID:", userID)
+	logging_utils.LogInfo("userID:", userID)
 
 	// ユーザー情報を取得
 	user, err := h.service.ServiceGetUserByID(userID)
@@ -134,7 +134,7 @@ func (h *AuthUserHandler) GetAuthenticatedUser(c echo.Context) error {
 	// パスワードなどのセンシティブな情報を削除
 	user.Password = ""
 
-	logging_utils.LogInfo("AuthUserHandler GetAuthenticatedUser end.")
+	logging_utils.LogInfo("end user:", user)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, user)
 }

@@ -13,6 +13,14 @@ import (
 	user_repository "backend/src/repositories/user"
 	auth_service "backend/src/services/auth"
 
+	project_handler "backend/src/handlers/project"
+	project_repository "backend/src/repositories/project"
+	project_service "backend/src/services/project"
+
+	task_handler "backend/src/handlers/task"
+	task_repository "backend/src/repositories/task"
+	task_service "backend/src/services/task"
+
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
@@ -43,11 +51,25 @@ func RoutesSetUp(e *echo.Echo, db *sql.DB, dbGorm *gorm.DB) {
 	authService := auth_service.NewAuthUserService(authRepo)
 	authHandler := auth_handler.NewAuthUserHandler(authService)
 
+	projectRepo := project_repository.NewProjectRepository(dbGorm)
+	projectService := project_service.NewProjectService(projectRepo)
+	projectHandler := project_handler.NewProjectHandler(projectService)
+
+	taskRepo := task_repository.NewTaskRepository(dbGorm)
+	taskService := task_service.NewTaskService(taskRepo)
+	taskHandler := task_handler.NewTaskHandler(taskService)
+
 	// サンプルルートのセットアップ
 	SetupSampleRoutes(e, sampleHandler)
 
 	// 認証ルートのセットアップ
 	SetupAuthUserRoutes(e, authHandler)
+
+	// プロジェクトルートのセットアップ
+	SetupProjectRoutes(e, projectHandler)
+
+	// タスクルートのセットアップ
+	SetupTaskRoutes(e, taskHandler)
 
 	fmt.Println("Routes set up")
 }

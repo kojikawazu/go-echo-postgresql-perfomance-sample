@@ -12,7 +12,12 @@ func SeedAll(db *gorm.DB) error {
 	// }
 
 	// ユーザーデータをシード
-	if err := SeedUsers(db); err != nil {
+	// if err := SeedUsers(db); err != nil {
+	// 	return err
+	// }
+
+	// プロジェクトとタスクのシードデータを挿入
+	if err := SeedProjectTasks(db); err != nil {
 		return err
 	}
 
