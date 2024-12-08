@@ -18,3 +18,20 @@ type Task struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+// TaskWithUser 構造体
+type TaskWithUser struct {
+	ID            string     `gorm:"column:id"`
+	ProjectID     string     `gorm:"column:project_id"`
+	Name          string     `gorm:"column:name"`
+	Description   string     `gorm:"column:description"`
+	Status        string     `gorm:"column:status"`
+	AssignedTo    *string    `gorm:"column:assigned_to"`
+	CreatedAt     time.Time  `gorm:"column:created_at"`
+	UpdatedAt     time.Time  `gorm:"column:updated_at"`
+	UserID        *string    `gorm:"column:user_id"`
+	UserUserName  *string    `gorm:"column:user_username"`
+	UserEmail     *string    `gorm:"column:user_email"`
+	UserCreatedAt *time.Time `gorm:"column:user_created_at"`
+	UserUpdatedAt *time.Time `gorm:"column:user_updated_at"`
+}

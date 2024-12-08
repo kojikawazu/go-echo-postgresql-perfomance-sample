@@ -20,7 +20,7 @@ func (h *TaskHandler) HandlerGetAllTasks(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end tasks:", tasks)
+	//logging_utils.LogInfo("end tasks:", tasks)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, tasks)
 }
@@ -38,7 +38,7 @@ func (h *TaskHandler) HandlerGetTaskByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end task:", task)
+	//logging_utils.LogInfo("end task:", task)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, task)
 }
@@ -59,7 +59,7 @@ func (h *TaskHandler) HandlerCreateTask(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end task:", task)
+	//logging_utils.LogInfo("end task:", task)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, task)
 }
@@ -82,7 +82,7 @@ func (h *TaskHandler) HandlerUpdateTask(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end task:", task)
+	//logging_utils.LogInfo("end task:", task)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, task)
 }
@@ -100,7 +100,7 @@ func (h *TaskHandler) HandlerDeleteTask(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end task:", id)
+	//logging_utils.LogInfo("end task:", id)
 	logging_utils.LogEnd(start)
 	return c.NoContent(http.StatusNoContent)
 }
