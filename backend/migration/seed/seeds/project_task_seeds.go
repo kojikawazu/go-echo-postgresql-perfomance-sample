@@ -3,6 +3,8 @@ package seeds
 import (
 	"fmt"
 	"log"
+	"math/rand"
+	"os"
 	"time"
 
 	project_model "backend/src/models/project"
@@ -16,70 +18,47 @@ import (
 func SeedProjectTasks(db *gorm.DB) error {
 	log.Println("Seeding project and task tasks...")
 
+	// カスタム乱数生成器を作成
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	assignedTo := os.Getenv("SEED_USER_ID")
+
 	// トランザクションを使用
 	return db.Transaction(func(tx *gorm.DB) error {
-		assignedTo := "1e678749-1805-4bdc-ad49-315435965458"
 
-		// プロジェクトデータ
-		projects := []project_model.Project{
-			{
-				ID:          uuid.NewString(),
-				Name:        "Project Alpha",
-				Description: "This is Project Alpha",
+		// 大量データ用のループ
+		for i := 0; i < 100; i++ { // 100プロジェクト
+			projectID := uuid.NewString()
+			project := project_model.Project{
+				ID:          projectID,
+				Name:        fmt.Sprintf("Project %d", i+1),
+				Description: fmt.Sprintf("This is Project %d", i+1),
 				CreatedAt:   time.Now(),
 				UpdatedAt:   time.Now(),
-			},
-			{
-				ID:          uuid.NewString(),
-				Name:        "Project Beta",
-				Description: "This is Project Beta",
-				CreatedAt:   time.Now(),
-				UpdatedAt:   time.Now(),
-			},
-		}
+			}
 
-		// プロジェクトを挿入
-		if err := tx.Create(&projects).Error; err != nil {
-			return fmt.Errorf("failed to seed projects: %w", err)
-		}
+			// プロジェクトを挿入
+			if err := tx.Create(&project).Error; err != nil {
+				return fmt.Errorf("failed to seed projects: %w", err)
+			}
 
-		// タスクデータ
-		tasks := []task_model.Task{
-			{
-				ID:          uuid.NewString(),
-				ProjectID:   projects[0].ID,
-				Name:        "Task 1 for Project Alpha",
-				Description: "Description for Task 1",
-				Status:      "pending",
-				CreatedAt:   time.Now(),
-				UpdatedAt:   time.Now(),
-				AssignedTo:  &assignedTo,
-			},
-			{
-				ID:          uuid.NewString(),
-				ProjectID:   projects[0].ID,
-				Name:        "Task 2 for Project Alpha",
-				Description: "Description for Task 2",
-				Status:      "completed",
-				CreatedAt:   time.Now(),
-				UpdatedAt:   time.Now(),
-				AssignedTo:  &assignedTo,
-			},
-			{
-				ID:          uuid.NewString(),
-				ProjectID:   projects[1].ID,
-				Name:        "Task 1 for Project Beta",
-				Description: "Description for Task 1",
-				Status:      "in_progress",
-				CreatedAt:   time.Now(),
-				UpdatedAt:   time.Now(),
-				AssignedTo:  &assignedTo,
-			},
-		}
+			// タスクをプロジェクトごとに生成
+			for j := 0; j < 1000; j++ { // 各プロジェクトに1000タスク
+				task := task_model.Task{
+					ID:          uuid.NewString(),
+					ProjectID:   projectID,
+					Name:        fmt.Sprintf("Task %d for Project %d", j+1, i+1),
+					Description: fmt.Sprintf("Description for Task %d of Project %d", j+1, i+1),
+					Status:      []string{"pending", "completed", "in_progress"}[r.Intn(3)], // カスタム乱数生成器を使用
+					CreatedAt:   time.Now(),
+					UpdatedAt:   time.Now(),
+					AssignedTo:  &assignedTo,
+				}
 
-		// タスクを挿入
-		if err := tx.Create(&tasks).Error; err != nil {
-			return fmt.Errorf("failed to seed tasks: %w", err)
+				// タスクを挿入
+				if err := tx.Create(&task).Error; err != nil {
+					return fmt.Errorf("failed to seed tasks: %w", err)
+				}
+			}
 		}
 
 		return nil
