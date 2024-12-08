@@ -12,7 +12,15 @@ PGPASSWORD=postgresql psql -h localhost -U postgresql -d postgresql
 psql -U postgresql -d postgresql
 ```
 
-## 3. テーブル作成
+## 3. テーブルの状態
+
+```sql
+SELECT COUNT(*) FROM samples;
+
+\d samples
+```
+
+## 4. テーブル作成
 
 ```sql
 CREATE TABLE samples (
@@ -21,103 +29,103 @@ CREATE TABLE samples (
 );
 ```
 
-## 4. テーブル削除
+## 5. テーブル削除
 
 ```sql
 DROP TABLE IF EXISTS samples;
 ```
 
-## 5. データ全削除
+## 6. データ全削除
 
 ```sql
 DELETE FROM samples IF EXISTS samples;
 ```
 
-## 6. 選択
+## 7. 選択
 
 ```sql
 SELECT * FROM samples;
 ```
 
-## 7. 追加
+## 8. 追加
 
 ```sql
 INSERT INTO samples (name) VALUES ('sample');
 ```
 
-## 8. 更新
+## 9. 更新
 
 ```sql
 UPDATE samples SET name = 'sample' WHERE id = 1;
 ```
 
-## 9. 削除
+## 10. 削除
 
 ```sql
 DELETE FROM samples WHERE id = 1;
 ```
 
-## 10. インデックス作成
+## 11. インデックス作成
 
 ```sql
 CREATE INDEX idx_samples_name ON samples (name);
 ```
 
-## 11. インデックス削除
+## 12. インデックス削除
 
 ```sql
 DROP INDEX IF EXISTS idx_samples_name;
 ```
 
-## 12. UUID拡張機能を有効にする
+## 13. UUID拡張機能を有効にする
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 ```
 
-## 13. UUIDを生成
+## 14. UUIDを生成
 
 ```sql
 SELECT uuid_generate_v4();
 ```
 
-## 14. UUIDをカラムに追加
+## 15. UUIDをカラムに追加
 
 ```sql
 ALTER TABLE samples ADD COLUMN id UUID PRIMARY KEY DEFAULT uuid_generate_v4();
 ```
 
-## 15. UUIDをカラムから削除
+## 16. UUIDをカラムから削除
 
 ```sql
 ALTER TABLE samples DROP COLUMN id;
 ```
 
-## 16. テーブルのカラムを変更
+## 17. テーブルのカラムを変更
 
 ```sql
 ALTER TABLE samples ALTER COLUMN name TYPE VARCHAR(100);
 ```
 
-## 17. テーブルのカラムを削除
+## 18. テーブルのカラムを削除
 
 ```sql
 ALTER TABLE samples DROP COLUMN name;
 ```
 
-## 18. テーブルのカラムを追加
+## 19. テーブルのカラムを追加
 
 ```sql
 ALTER TABLE samples ADD COLUMN name VARCHAR(255) NOT NULL;
 ```
 
-## 19. テーブルのカラムを変更
+## 20. テーブルのカラムを変更
 
 ```sql
 ALTER TABLE samples ALTER COLUMN name TYPE VARCHAR(100);
 ```
 
-## 20. 汎用計測関数の作成
+## 21. 汎用計測関数の作成
 
 ```sql
 CREATE OR REPLACE FUNCTION measure_execution_time(sql_query text)
