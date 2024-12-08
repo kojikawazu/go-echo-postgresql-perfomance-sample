@@ -20,7 +20,7 @@ func (h *ProjectHandler) HandlerGetAllProjects(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end projects:", projects)
+	// logging_utils.LogInfo("end projects:", projects)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, projects)
 }
@@ -38,7 +38,7 @@ func (h *ProjectHandler) HandlerGetProjectByID(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end project:", project)
+	// logging_utils.LogInfo("end project:", project)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, project)
 }
@@ -59,7 +59,7 @@ func (h *ProjectHandler) HandlerCreateProject(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end project:", project)
+	// logging_utils.LogInfo("end project:", project)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, project)
 }
@@ -82,7 +82,7 @@ func (h *ProjectHandler) HandlerUpdateProject(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end project:", project)
+	// logging_utils.LogInfo("end project:", project)
 	logging_utils.LogEnd(start)
 	return c.JSON(http.StatusOK, project)
 }
@@ -100,7 +100,7 @@ func (h *ProjectHandler) HandlerDeleteProject(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	logging_utils.LogInfo("end project:", id)
+	// logging_utils.LogInfo("end project:", id)
 	logging_utils.LogEnd(start)
 	return c.NoContent(http.StatusNoContent)
 }

@@ -15,3 +15,19 @@ type Project struct {
 	UpdatedAt   time.Time
 	Tasks       []task_model.Task `gorm:"foreignKey:ProjectID;constraint:OnDelete:CASCADE"`
 }
+
+// ProjectWithTasks 構造体
+type ProjectWithTasks struct {
+	ID              string
+	Name            string
+	Description     string
+	CreatedAt       time.Time
+	UpdatedAt       time.Time
+	TaskID          *string
+	TaskName        *string
+	TaskDescription *string
+	TaskStatus      *string
+	TaskAssignedTo  *string
+	TaskCreatedAt   *time.Time
+	TaskUpdatedAt   *time.Time
+}
